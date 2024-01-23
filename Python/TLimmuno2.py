@@ -100,15 +100,26 @@ def main(args):
     MHC = MHC_code(Data)
     print("Model predict")
     prediction_result = model_predict(peptide,MHC,BAmodel,TLimmuno2)
-    print("Ranking (That may take a while)")
-    Data["prediction"] = prediction_result
-    Result = rank(Data,BAmodel,TLimmuno2)
-    if args.mode == "line":
-        print("epitope score : {}".format(Result["prediction"].values))
-        print("epitope rank : {}".format(Result["Rank"].values))
-    if args.mode == "file":
-        Result.to_csv("{}/result.csv".format(args.outdir))
-        print("file saved")
+    # check directory exists. If not, create it.
+    if not os.path.exists(args.outdir):
+        os.makedirs(args.outdir)
+    if args.rank:
+        print("Ranking (That may take a while)")
+        Data["prediction"] = prediction_result
+        Result = rank(Data,BAmodel,TLimmuno2)
+        if args.mode == "line":
+            print("epitope score : {}".format(Result["prediction"].values))
+            print("epitope rank : {}".format(Result["Rank"].values))
+        if args.mode == "file":
+            Result.to_csv("{}/result.csv".format(args.outdir))
+            print("file saved")
+    else:
+        Result_ba=Data[["pep","HLA"]].assign(prediction=prediction_result)
+        if args.mode == "line":
+            print("epitope score : {}".format(Result_ba["prediction"].values))
+        if args.mode == "file":
+            Result_ba.to_csv("{}/result.csv".format(args.outdir))
+            print("file saved")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='TLimmuno2 command line')
@@ -118,10 +129,6 @@ if __name__ == '__main__':
     parser.add_argument('--intdir',type=str,default=None,help='if file mode, specifying the path to your input file')
     parser.add_argument('--outdir',type=str,default=None,help='if file mode, specifying the path to your output folder')
     parser.add_argument('--gpu',type=str,default=True,help='if you device don\'t have GPU, please set it to False')
+    parser.add_argument('--rank',type=str,default=True,help='calculate immunogenicitey rank. If you only want the binding prediction set it to False')
     args = parser.parse_args()
     main(args)
-
-
-
-
-
