@@ -103,7 +103,7 @@ def main(args):
     # check directory exists. If not, create it.
     if not os.path.exists(args.outdir):
         os.makedirs(args.outdir)
-    if args.rank:
+    if args.rank==True:
         print("Ranking (That may take a while)")
         Data["prediction"] = prediction_result
         Result = rank(Data,BAmodel,TLimmuno2)
@@ -111,14 +111,14 @@ def main(args):
             print("epitope score : {}".format(Result["prediction"].values))
             print("epitope rank : {}".format(Result["Rank"].values))
         if args.mode == "file":
-            Result.to_csv("{}/result.csv".format(args.outdir))
+            Result.to_csv("{}/result.csv".format(args.outdir),index=False)
             print("file saved")
     else:
-        Result_ba=Data[["pep","HLA"]].assign(prediction=prediction_result)
+        Result_ba=Data[["pep","HLA"]].assign(prediction=prediction_result,Rank=np.nan)
         if args.mode == "line":
             print("epitope score : {}".format(Result_ba["prediction"].values))
         if args.mode == "file":
-            Result_ba.to_csv("{}/result.csv".format(args.outdir))
+            Result_ba.to_csv("{}/result.csv".format(args.outdir),index=False)
             print("file saved")
 
 if __name__ == '__main__':
