@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import tensorflow as tf
 import argparse
+import os
 
 #load model
 def model_load():
@@ -91,8 +92,7 @@ def rank(Data,BAmodel,TLimmuno2):
 def main(args):
     print("Load model")
     if args.gpu != True:
-        import os
-        os.environ["CUDA_VISIBLE_DEVICES"]="-1" 
+        os.environ["CUDA_VISIBLE_DEVICES"]="-1"
     BAmodel,TLimmuno2 = model_load()
     print("Data process")
     Data = data_process(args)
