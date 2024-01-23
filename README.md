@@ -2,7 +2,11 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![version](https://img.shields.io/badge/version-dev-green.svg)](https://shields.io/)
-
+## Fork
+This is fork of the respository in https://github.com/XSLiuLab/TLimmuno2.
+Current changes:
+- added option to disable immunogenicity rank estimates. Use --rank False
+- if output directory does not exists it will create it.
 ## Overview
 
 This repository provides the analysis reports, code, data and python packages for readers who are interest in this project and make it easier to reproduce the whole analysis procedure.
